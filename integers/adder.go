@@ -1,3 +1,4 @@
+// Package integers provides functions for working with integers
 package integers
 
 // Add takes two integers and returns the sum of them.

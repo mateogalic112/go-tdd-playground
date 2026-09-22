@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"example.com/hello/integers"
+)
 
 const (
 	spanish            = "Spanish"
@@ -38,4 +42,5 @@ func greetingPrefix(language string) (prefix string) {
 
 func main() {
 	fmt.Println(Hello("world", ""))
+	fmt.Println(integers.Add(1, 2))
 }
