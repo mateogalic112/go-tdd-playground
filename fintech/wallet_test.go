@@ -1,22 +1,29 @@
 package fintech
 
 import (
-	"fmt"
 	"testing"
 )
 
 func TestWallet(t *testing.T) {
-	wallet := Wallet{}
+	t.Run("Wallet deposit", func(t *testing.T) {
+		wallet := Wallet{}
+		wallet.Deposit(Bitcoin(10))
 
-	wallet.Deposit(10)
+		got := wallet.Balance()
+		want := Bitcoin(10)
 
-	got := wallet.Balance()
+		if got != want {
+			t.Errorf("got %d want %d", got, want)
+		}
+	})
 
-	fmt.Printf("address of balance in test is %p \n", &wallet.balance)
+	t.Run("Bitcoin String", func(t *testing.T) {
+		btc := Bitcoin(10)
+		got := btc.String()
+		want := "10 BTC"
 
-	want := 10
-
-	if got != want {
-		t.Errorf("got %d want %d", got, want)
-	}
+		if got != want {
+			t.Errorf("got %s want %s", got, want)
+		}
+	})
 }
