@@ -3,9 +3,9 @@ package main
 import (
 	"os"
 
-	"example.com/hello/di"
+	"example.com/hello/mocking"
 )
 
 func main() {
-	di.Greet(os.Stdout, "Lockie")
+	mocking.Countdown(os.Stdout)
 }
