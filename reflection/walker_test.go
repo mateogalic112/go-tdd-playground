@@ -87,4 +87,42 @@ func TestWalk(t *testing.T) {
 			}
 		})
 	}
+
+	t.Run("with maps", func(t *testing.T) {
+		base := map[string]string{
+			"Cow":   "Moo",
+			"Sheep": "Baa",
+		}
+
+		var got []string
+		walk(base, func(input string) {
+			got = append(got, input)
+		})
+
+		assertLength(t, got, len(base))
+		assertContains(t, got, "Moo")
+		assertContains(t, got, "Baa")
+	})
+
+}
+
+func assertLength(t testing.TB, got []string, want int) {
+	t.Helper()
+	if len(got) != want {
+		t.Errorf("got %d values but expected %d", len(got), want)
+	}
+}
+
+func assertContains(t testing.TB, haystack []string, needle string) {
+	t.Helper()
+	contains := false
+	for _, x := range haystack {
+		if x == needle {
+			contains = true
+		}
+	}
+
+	if !contains {
+		t.Errorf("expected %v to contain %q but it didn't", haystack, needle)
+	}
 }

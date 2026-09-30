@@ -9,6 +9,10 @@ func walk(x any, fn func(input string)) {
 	switch val.Kind() {
 	case reflect.String:
 		fn(val.String())
+	case reflect.Map:
+		for _, key := range val.MapKeys() {
+			walk(val.MapIndex(key).Interface(), fn)
+		}
 	case reflect.Struct:
 		for _, field := range val.Fields() {
 			walk(field.Interface(), fn)
