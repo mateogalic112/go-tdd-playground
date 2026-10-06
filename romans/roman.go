@@ -53,7 +53,6 @@ func ConvertToArabicRecursive(roman string, arabic int, processed []RomanNumeral
 				return ConvertToArabicRecursive(after, arabic+numeral.Value, append(processed, numeral))
 			}
 
-			// invalid sequence
 			lastProcessed := processed[len(processed)-1]
 
 			// largest numbers should be up front
@@ -61,8 +60,10 @@ func ConvertToArabicRecursive(roman string, arabic int, processed []RomanNumeral
 				return 0, errors.New("preceeding symbol cant be smaller than next one")
 			}
 
-			if len(lastProcessed.Symbol) > 1 {
-				if lastProcessed.Symbol[0] == numeral.Symbol[0] {
+			// sum - check if sequence is valid
+			sum := lastProcessed.Value + numeral.Value
+			for _, num := range allRomanNumerals {
+				if sum == num.Value {
 					return 0, errors.New("invalid symbol sequence")
 				}
 			}
