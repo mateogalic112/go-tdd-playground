@@ -40,14 +40,17 @@ func ConvertToArabic(roman string) int {
 	return arabic
 }
 
-func ConvertToArabicRecursive(roman string, arabic int) (int, error) {
+func ConvertToArabicRecursive(roman string, arabic int, lastProcessed RomanNumeral) (int, error) {
 	if len(roman) == 0 {
 		return arabic, nil
 	}
 
 	for _, numeral := range allRomanNumerals {
 		if after, found := strings.CutPrefix(roman, numeral.Symbol); found {
-			return ConvertToArabicRecursive(after, arabic+numeral.Value)
+			if lastProcessed.Value < numeral.Value {
+				return 0, errors.New("preceeding symbol cant be smaller than next one!")
+			}
+			return ConvertToArabicRecursive(after, arabic+numeral.Value, numeral)
 		}
 	}
 
