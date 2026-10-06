@@ -1,7 +1,10 @@
 // Package romans with teach us about property based tests
 package romans
 
-import "strings"
+import (
+	"errors"
+	"strings"
+)
 
 type RomanNumeral struct {
 	Value  int
@@ -37,19 +40,19 @@ func ConvertToArabic(roman string) int {
 	return arabic
 }
 
-func ConvertToArabicRecursive(roman string, arabic int) int {
+func ConvertToArabicRecursive(roman string, arabic int) (int, error) {
 	if len(roman) == 0 {
-		return arabic
+		return arabic, nil
 	}
 
 	for _, numeral := range allRomanNumerals {
 		if after, found := strings.CutPrefix(roman, numeral.Symbol); found {
 			return ConvertToArabicRecursive(after, arabic+numeral.Value)
 		}
-
 	}
 
-	return arabic
+	return 0, errors.New("invalid string")
+
 }
 
 func ConvertToRoman(arabic int) string {
