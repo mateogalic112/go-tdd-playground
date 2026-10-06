@@ -2,11 +2,14 @@ package romans
 
 import (
 	"fmt"
+	"math/rand"
+	"reflect"
 	"testing"
+	"testing/quick"
 )
 
 var cases = []struct {
-	Arabic int
+	Arabic uint16
 	Roman  string
 }{
 	{Arabic: 1, Roman: "I"},
@@ -42,7 +45,7 @@ var cases = []struct {
 
 var mixedCases = []struct {
 	Roman  string
-	Arabic int
+	Arabic uint16
 	Valid  bool
 }{
 	// Basic numerals
@@ -151,6 +154,23 @@ func TestConvertingToArabic(t *testing.T) {
 				t.Errorf("got %d, want %d", got, test.Arabic)
 			}
 		})
+	}
+}
+
+func TestPropertiesOfConversion(t *testing.T) {
+	assertion := func(arabic uint16) bool {
+		roman := ConvertToRoman(arabic)
+		fromRoman := ConvertToArabic(roman)
+		return fromRoman == arabic
+	}
+
+	if err := quick.Check(assertion, &quick.Config{
+		MaxCount: 1000,
+		Values: func(args []reflect.Value, r *rand.Rand) {
+			args[0] = reflect.ValueOf(uint16(r.Intn(4000)))
+		},
+	}); err != nil {
+		t.Error("failed checks", err)
 	}
 }
 

@@ -7,7 +7,7 @@ import (
 )
 
 type RomanNumeral struct {
-	Value      int
+	Value      uint16
 	Symbol     string
 	MaxRepeats int
 }
@@ -28,8 +28,8 @@ var allRomanNumerals = []RomanNumeral{
 	{1, "I", 3},
 }
 
-func ConvertToArabic(roman string) int {
-	var arabic = 0
+func ConvertToArabic(roman string) uint16 {
+	var arabic uint16 = 0
 
 	for _, numeral := range allRomanNumerals {
 		for strings.HasPrefix(roman, numeral.Symbol) {
@@ -41,7 +41,7 @@ func ConvertToArabic(roman string) int {
 	return arabic
 }
 
-func ConvertToArabicRecursive(roman string, arabic int, processed []RomanNumeral) (int, error) {
+func ConvertToArabicRecursive(roman string, arabic uint16, processed []RomanNumeral) (uint16, error) {
 	if len(roman) == 0 {
 		return arabic, nil
 	}
@@ -90,7 +90,7 @@ func ConvertToArabicRecursive(roman string, arabic int, processed []RomanNumeral
 
 }
 
-func ConvertToRoman(arabic int) string {
+func ConvertToRoman(arabic uint16) string {
 	var result strings.Builder
 
 	for _, numeral := range allRomanNumerals {
