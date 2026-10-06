@@ -48,19 +48,15 @@ func ConvertToArabicRecursive(roman string, arabic int, processed []RomanNumeral
 
 	for _, numeral := range allRomanNumerals {
 		if after, found := strings.CutPrefix(roman, numeral.Symbol); found {
+			// nothing processed yet
 			if len(processed) == 0 {
 				return ConvertToArabicRecursive(after, arabic+numeral.Value, append(processed, numeral))
 			}
 
+			// largest numbers should be up front
 			lastProcessed := processed[len(processed)-1]
 			if lastProcessed.Value < numeral.Value {
 				return 0, errors.New("preceeding symbol cant be smaller than next one")
-			}
-
-			if len(lastProcessed.Symbol) > 1 {
-				if lastProcessed.Symbol[0] == numeral.Symbol[0] {
-					return 0, errors.New("symbols repeat in invalid way")
-				}
 			}
 
 			if len(processed) < numeral.MaxRepeats {
