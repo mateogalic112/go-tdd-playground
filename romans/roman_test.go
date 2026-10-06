@@ -46,6 +46,7 @@ var mixedCases = []struct {
 	Valid  bool
 }{
 	{Roman: "MM", Arabic: 2000, Valid: true},
+	{Roman: "IIII", Arabic: 0, Valid: false},
 	{Roman: "QQ", Arabic: 0, Valid: false},
 	{Roman: "CCM", Arabic: 0, Valid: false},
 }
@@ -64,7 +65,7 @@ func TestRomanNumerals(t *testing.T) {
 func TestConvertingToArabic(t *testing.T) {
 	for _, test := range cases {
 		t.Run(fmt.Sprintf("%q gets converted to %d", test.Roman, test.Arabic), func(t *testing.T) {
-			got, _ := ConvertToArabicRecursive(test.Roman, 0, RomanNumeral{1000, "M"})
+			got, _ := ConvertToArabicRecursive(test.Roman, 0, nil)
 			if got != test.Arabic {
 				t.Errorf("got %d, want %d", got, test.Arabic)
 			}
@@ -75,7 +76,7 @@ func TestConvertingToArabic(t *testing.T) {
 func TestInvalidConvertingToArabic(t *testing.T) {
 	for _, test := range mixedCases {
 		t.Run(fmt.Sprintf("%q should be %t", test.Roman, test.Valid), func(t *testing.T) {
-			got, err := ConvertToArabicRecursive(test.Roman, 0, RomanNumeral{1000, "M"})
+			got, err := ConvertToArabicRecursive(test.Roman, 0, nil)
 			if err != nil {
 				if test.Valid {
 					t.Errorf("roman string %q should have been invalid", test.Roman)
