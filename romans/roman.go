@@ -37,6 +37,21 @@ func ConvertToArabic(roman string) int {
 	return arabic
 }
 
+func ConvertToArabicRecursive(roman string, arabic int) int {
+	if len(roman) == 0 {
+		return arabic
+	}
+
+	for _, numeral := range allRomanNumerals {
+		if after, found := strings.CutPrefix(roman, numeral.Symbol); found {
+			return ConvertToArabicRecursive(after, arabic+numeral.Value)
+		}
+
+	}
+
+	return arabic
+}
+
 func ConvertToRoman(arabic int) string {
 	var result strings.Builder
 
