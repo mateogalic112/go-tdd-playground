@@ -45,10 +45,91 @@ var mixedCases = []struct {
 	Arabic int
 	Valid  bool
 }{
+	// Basic numerals
+
+	{Roman: "I", Arabic: 1, Valid: true},
+	{Roman: "V", Arabic: 5, Valid: true},
+	{Roman: "X", Arabic: 10, Valid: true},
+	{Roman: "L", Arabic: 50, Valid: true},
+	{Roman: "C", Arabic: 100, Valid: true},
+	{Roman: "D", Arabic: 500, Valid: true},
+	{Roman: "M", Arabic: 1000, Valid: true},
+	// Repetition
+	{Roman: "II", Arabic: 2, Valid: true},
+	{Roman: "III", Arabic: 3, Valid: true},
+	{Roman: "XX", Arabic: 20, Valid: true},
+	{Roman: "XXX", Arabic: 30, Valid: true},
+	{Roman: "CCC", Arabic: 300, Valid: true},
+	{Roman: "MMM", Arabic: 3000, Valid: true},
+	// Additive notation
+	{Roman: "VI", Arabic: 6, Valid: true},
+	{Roman: "VII", Arabic: 7, Valid: true},
+	{Roman: "VIII", Arabic: 8, Valid: true},
+	{Roman: "XII", Arabic: 12, Valid: true},
+	{Roman: "LX", Arabic: 60, Valid: true},
+	{Roman: "CL", Arabic: 150, Valid: true},
+	{Roman: "MD", Arabic: 1500, Valid: true},
+	// Subtractive notation
+	{Roman: "IV", Arabic: 4, Valid: true},
+	{Roman: "IX", Arabic: 9, Valid: true},
+	{Roman: "XL", Arabic: 40, Valid: true},
+	{Roman: "XC", Arabic: 90, Valid: true},
+	{Roman: "CD", Arabic: 400, Valid: true},
+	{Roman: "CM", Arabic: 900, Valid: true},
+	// Mixed / realistic values
+	{Roman: "XIV", Arabic: 14, Valid: true},
+	{Roman: "XIX", Arabic: 19, Valid: true},
+	{Roman: "XLII", Arabic: 42, Valid: true},
+	{Roman: "XCIX", Arabic: 99, Valid: true},
+	{Roman: "CDXLIV", Arabic: 444, Valid: true},
+	{Roman: "CMXCIX", Arabic: 999, Valid: true},
+	{Roman: "MCMXCIV", Arabic: 1994, Valid: true},
 	{Roman: "MM", Arabic: 2000, Valid: true},
-	{Roman: "IIII", Arabic: 0, Valid: false},
+	{Roman: "MMXXVI", Arabic: 2026, Valid: true},
+	{Roman: "MMMDCCCLXXXVIII", Arabic: 3888, Valid: true},
+	{Roman: "MMMCMXCIX", Arabic: 3999, Valid: true},
+	// Invalid characters
+	{Roman: "Q", Arabic: 0, Valid: false},
 	{Roman: "QQ", Arabic: 0, Valid: false},
+	{Roman: "ABC", Arabic: 0, Valid: false},
+	{Roman: "XQ", Arabic: 0, Valid: false},
+	{Roman: "123", Arabic: 0, Valid: false},
+	// Too many repetitions
+	{Roman: "IIII", Arabic: 0, Valid: false},
+	{Roman: "XXXX", Arabic: 0, Valid: false},
+	{Roman: "CCCC", Arabic: 0, Valid: false},
+	{Roman: "MMMM", Arabic: 0, Valid: false},
+	// V, L and D cannot repeat
+	{Roman: "VV", Arabic: 0, Valid: false},
+	{Roman: "LL", Arabic: 0, Valid: false},
+	{Roman: "DD", Arabic: 0, Valid: false},
+	// Invalid subtraction
+	{Roman: "IL", Arabic: 0, Valid: false},
+	{Roman: "IC", Arabic: 0, Valid: false},
+	{Roman: "ID", Arabic: 0, Valid: false},
+	{Roman: "IM", Arabic: 0, Valid: false},
+	{Roman: "XD", Arabic: 0, Valid: false},
+	{Roman: "XM", Arabic: 0, Valid: false},
+	{Roman: "VX", Arabic: 0, Valid: false},
+	{Roman: "LC", Arabic: 0, Valid: false},
+	{Roman: "DM", Arabic: 0, Valid: false},
+	// Invalid ordering / non-canonical forms
+	{Roman: "IIV", Arabic: 0, Valid: false},
+	{Roman: "IIX", Arabic: 0, Valid: false},
+	{Roman: "XXC", Arabic: 0, Valid: false},
 	{Roman: "CCM", Arabic: 0, Valid: false},
+	{Roman: "IXIX", Arabic: 0, Valid: false},
+	{Roman: "IVIV", Arabic: 0, Valid: false},
+	{Roman: "CMCM", Arabic: 0, Valid: false},
+	{Roman: "VIV", Arabic: 0, Valid: false},
+	{Roman: "XCM", Arabic: 0, Valid: false},
+	// Ordering violations
+	{Roman: "IXX", Arabic: 0, Valid: false},
+	{Roman: "XIXI", Arabic: 0, Valid: false},
+	{Roman: "IVI", Arabic: 0, Valid: false},
+	{Roman: "CMC", Arabic: 0, Valid: false},
+	// Edge cases
+	{Roman: "", Arabic: 0, Valid: false},
 }
 
 func TestRomanNumerals(t *testing.T) {
