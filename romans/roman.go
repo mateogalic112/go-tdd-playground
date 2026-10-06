@@ -48,7 +48,7 @@ func ConvertToArabicRecursive(roman string, arabic int, lastProcessed RomanNumer
 	for _, numeral := range allRomanNumerals {
 		if after, found := strings.CutPrefix(roman, numeral.Symbol); found {
 			if lastProcessed.Value < numeral.Value {
-				return 0, errors.New("preceeding symbol cant be smaller than next one!")
+				return 0, errors.New("preceeding symbol cant be smaller than next one")
 			}
 			return ConvertToArabicRecursive(after, arabic+numeral.Value, numeral)
 		}
