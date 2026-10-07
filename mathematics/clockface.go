@@ -11,11 +11,17 @@ type Point struct {
 	Y float64
 }
 
+const (
+	secondHandLength = 90
+	clockCentreX     = 150
+	clockCentreY     = 150
+)
+
 func SecondHand(t time.Time) Point {
 	p := SecondHandPoint(t)
-	p = Point{p.X * 90, p.Y * 90}
+	p = Point{p.X * secondHandLength, p.Y * secondHandLength}
 	p = Point{p.X, -p.Y}
-	p = Point{p.X + 150, p.Y + 150}
+	p = Point{p.X + clockCentreX, p.Y + clockCentreY}
 	return p
 }
 
