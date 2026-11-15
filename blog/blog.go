@@ -58,7 +58,8 @@ func newPost(postFile io.Reader) (Post, error) {
 	title := readMetaLine(titleSeparator)
 	description := readMetaLine(descriptionSeparator)
 	tags := strings.Split(readMetaLine(tagsSeparator), ", ")
-	scanner.Scan()
+
+	scanner.Scan() // ignore dashed line
 	body := readBody(scanner)
 
 	return Post{Title: title, Description: description, Tags: tags, Body: body}, nil
