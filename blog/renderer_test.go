@@ -17,10 +17,15 @@ func TestRender(t *testing.T) {
 		}
 	)
 
+	postRenderer, err := NewPostRenderer()
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	t.Run("it converts a single post into HTML", func(t *testing.T) {
 		buf := bytes.Buffer{}
 
-		if err := Render(&buf, aPost); err != nil {
+		if err := postRenderer.Render(&buf, aPost); err != nil {
 			t.Fatal(err)
 		}
 

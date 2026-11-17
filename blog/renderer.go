@@ -9,11 +9,19 @@ import (
 //go:embed "templates/*"
 var postTemplates embed.FS
 
-func Render(w io.Writer, p Post) error {
+type PostRenderer struct {
+	templ *template.Template
+}
+
+func NewPostRenderer() (*PostRenderer, error) {
 	templ, err := template.ParseFS(postTemplates, "templates/*.gohtml")
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return templ.ExecuteTemplate(w, "blog.gohtml", p)
+	return &PostRenderer{templ}, nil
+}
+
+func (r *PostRenderer) Render(w io.Writer, p Post) error {
+	return r.templ.ExecuteTemplate(w, "blog.gohtml", p)
 }
