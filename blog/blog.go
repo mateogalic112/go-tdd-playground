@@ -4,9 +4,13 @@ package blog
 import (
 	"bufio"
 	"fmt"
+	"html/template"
 	"io"
 	"io/fs"
 	"strings"
+
+	"github.com/gomarkdown/markdown"
+	"github.com/gomarkdown/markdown/parser"
 )
 
 type Post struct {
@@ -17,15 +21,21 @@ type Post struct {
 type PostViewModel struct {
 	Title, SanitisedTitle, Description, Body string
 	Tags                                     []string
+	HTMLBody                                 template.HTML
 }
 
 func NewPostViewModel(p Post) *PostViewModel {
+	extensions := parser.CommonExtensions | parser.AutoHeadingIDs
+	mdParser := parser.NewWithExtensions(extensions)
+	htmlBody := template.HTML(markdown.ToHTML([]byte(p.Body), mdParser, nil))
+
 	return &PostViewModel{
 		Title:          p.Title,
 		SanitisedTitle: sanitiseTitle(p),
 		Description:    p.Description,
 		Body:           p.Body,
 		Tags:           p.Tags,
+		HTMLBody:       htmlBody,
 	}
 }
 
