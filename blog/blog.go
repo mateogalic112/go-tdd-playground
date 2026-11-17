@@ -14,6 +14,25 @@ type Post struct {
 	Tags                     []string
 }
 
+type PostViewModel struct {
+	Title, SanitisedTitle, Description, Body string
+	Tags                                     []string
+}
+
+func NewPostViewModel(p Post) *PostViewModel {
+	return &PostViewModel{
+		Title:          p.Title,
+		SanitisedTitle: sanitiseTitle(p),
+		Description:    p.Description,
+		Body:           p.Body,
+		Tags:           p.Tags,
+	}
+}
+
+func sanitiseTitle(post Post) string {
+	return strings.ToLower(strings.ReplaceAll(post.Title, " ", "-"))
+}
+
 func NewPostsFromFS(fileSystem fs.FS) ([]Post, error) {
 	dir, err := fs.ReadDir(fileSystem, ".")
 	if err != nil {

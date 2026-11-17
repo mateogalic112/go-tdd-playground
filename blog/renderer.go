@@ -4,7 +4,6 @@ import (
 	"embed"
 	"html/template"
 	"io"
-	"strings"
 )
 
 //go:embed "templates/*"
@@ -28,18 +27,18 @@ func (r *PostRenderer) Render(w io.Writer, p Post) error {
 }
 
 func (r *PostRenderer) RenderIndex(w io.Writer, posts []Post) error {
-	indexTemplate := `<ol>{{range .}}<li><a href="/post/{{sanitiseTitle .Title}}">{{.Title}}</a></li>{{end}}</ol>`
+	indexTemplate := `<ol>{{range .}}<li><a href="/post/{{.SanitisedTitle}}">{{.Title}}</a></li>{{end}}</ol>`
 
-	templ, err := template.New("index").Funcs(template.FuncMap{
-		"sanitiseTitle": func(title string) string {
-			return strings.ToLower(strings.ReplaceAll(title, " ", "-"))
-		},
-	}).Parse(indexTemplate)
+	templ, err := template.New("index").Parse(indexTemplate)
 	if err != nil {
 		return err
 	}
 
-	if err := templ.Execute(w, posts); err != nil {
+	var views []PostViewModel
+	for _, post := range posts {
+		views = append(views, *NewPostViewModel(post))
+	}
+	if err := templ.Execute(w, views); err != nil {
 		return err
 	}
 
