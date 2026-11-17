@@ -15,5 +15,5 @@ func Render(w io.Writer, p Post) error {
 		return err
 	}
 
-	return templ.Execute(w, p)
+	return templ.ExecuteTemplate(w, "blog.gohtml", p)
 }
